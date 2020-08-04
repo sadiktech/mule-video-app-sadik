@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f56c468a-02c6-47d9-ad14-9313b35a6da8" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="b0691c8f-e3c4-48dd-a695-494ad2f67e19" >
+		<http:request-connection protocol="HTTPS" host="videos.mulesoft.com" />
+	</http:request-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="77745134-f941-4348-9344-2e186e35b72c" >
+		<file:connection workingDir="C:\Users\gmalenki\Downloads" />
+	</file:config>
+	<flow name="stest-file" doc:id="b0fadf03-48d9-427c-b4f9-fab0f79ee2d9" >
+		<http:listener doc:name="Listener" doc:id="ef3d2de7-977f-4f8b-8c6a-9b64f9770918" config-ref="HTTP_Listener_config" path="/test" responseStreamingMode="ALWAYS">
+			<repeatable-in-memory-stream />
+		</http:listener>
+		<http:load-static-resource doc:name="Load static resource" doc:id="c8b95df0-7fa4-4c40-8c1a-e549352db64a" resourceBasePath="${app.home}/MyApp/test.mp4"/>
+	</flow>
+	<flow name="videos-html" doc:id="568a16ca-434c-4b1e-86dd-8d3a27a3446c" >
+		<http:listener doc:name="videos-html" doc:id="ae69de6a-14ba-4003-8f8f-583bb58581e2" config-ref="HTTP_Listener_config" path="/videos"/>
+		<http:load-static-resource doc:name="Load static resource" doc:id="00f071cc-793c-41e2-ad11-abf0cbeed85c" resourceBasePath="${app.home}/MyApp/stream.html"/>
+	</flow>
+	<flow name="AnimationFlow" doc:id="ab02dace-c084-4e9d-90ac-27d5bf2c7ee0" >
+		<http:listener doc:name="Listener" doc:id="59564c73-6403-4f82-8182-87eee33a9c26" config-ref="HTTP_Listener_config" path="/animation"/>
+		<http:load-static-resource doc:name="Load static resource" doc:id="6e28a999-e9e0-4607-bc65-a5c7fa33626f" resourceBasePath="${app.home}/MyApp/animation.mp4"/>
+	</flow>
+</mule>
